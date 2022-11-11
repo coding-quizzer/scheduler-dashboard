@@ -23,13 +23,27 @@ const data = [
   },
   {
     id: 4,
-    label: "Most Popular Day",
+    label: "Interviews Per Day",
     value: "2.3",
   }
 ];
 
 class Dashboard extends Component {
   state = { loading: false, focused: null };
+
+  componentDidMount() {
+    const focused = JSON.parse(localStorage.getItem("focused"));
+
+    if (focused) {
+      this.setState({ focused });
+    }
+  }
+
+  componentDidUpdate(previousProps, previousState) {
+    if (previousState.focused !== this.state.focused) {
+      localStorage.setItem("focused", JSON.stringify(this.state.focused));
+    }
+  }
 
   selectPanel (id) {
     this.setState (previousState => ({
@@ -47,7 +61,7 @@ class Dashboard extends Component {
       key={panel.id}
       id={panel.id}
       label={panel.label}
-      value={panel.id}
+      value={panel.value}
       onSelect={event => this.selectPanel(panel.id)}
     />
     ));
